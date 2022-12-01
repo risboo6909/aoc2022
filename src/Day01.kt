@@ -25,7 +25,7 @@ fun main() {
 
     fun part2(input: List<String>): Int {
         var groupSum = 0
-        var groupSums = mutableListOf<Int>()
+        val groupSums = mutableListOf<Int>()
 
         for (line: String in input) {
             val parsedInt = line.toIntOrNull()
@@ -40,8 +40,7 @@ fun main() {
 
         groupSums.add(groupSum)
 
-        val tmp = groupSums.sorted().reversed()
-        return tmp[0] + tmp[1] + tmp[2]
+        return groupSums.sorted().reversed().take(3).sum()
     }
 
     // test if implementation meets criteria from the description, like:
