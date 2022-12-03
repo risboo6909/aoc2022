@@ -1,5 +1,3 @@
-import kotlin.system.exitProcess
-
 fun main() {
     val priorities = ('a'..'z').zip((1..26)).toMap() +
                      ('A'..'Z').zip((27..52)).toMap()
