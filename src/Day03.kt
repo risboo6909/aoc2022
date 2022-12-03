@@ -1,3 +1,5 @@
+import kotlin.system.exitProcess
+
 fun main() {
     val priorities = ('a'..'z').zip((1..26)).toMap() +
                      ('A'..'Z').zip((27..52)).toMap()
@@ -7,15 +9,10 @@ fun main() {
 
         for (line in input) {
             val halfLen = line.length / 2
-            val freq = line.take(halfLen).associateWith { 1 }.toMutableMap()
-            val tail = line.substring(halfLen)
+            val head = line.take(halfLen).asIterable()
+            val tail = line.substring(halfLen).asIterable().toSet()
 
-            for (c in tail) {
-                if (freq.getOrDefault(c, 0) + 1 == 2) {
-                    totalSum += priorities[c]!!
-                    break
-                }
-            }
+            totalSum += priorities[head.intersect(tail).single()]!!
         }
 
         return totalSum
