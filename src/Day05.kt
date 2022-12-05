@@ -2,10 +2,12 @@ const val Empty = "    "
 
 data class Instruction(val count: Int, val from: Int, val to: Int)
 
+typealias BucketsMap = MutableMap<Int, MutableList<Char>>
+
 fun main() {
 
-    fun parseBuckets(input: List<String>): MutableMap<Int, MutableList<Char>> {
-        val stacks = mutableMapOf<Int, MutableList<Char>>()
+    fun parseBuckets(input: List<String>): BucketsMap {
+        val stacks: BucketsMap = mutableMapOf()
 
         outer@for (line in input) {
             for ((i, chunk) in line.chunked(4).withIndex()) {
@@ -55,7 +57,7 @@ fun main() {
         return instructions
     }
 
-    fun getTopItems(buckets: MutableMap<Int, MutableList<Char>>): String {
+    fun getTopItems(buckets: BucketsMap): String {
         val res = mutableListOf<Char>()
         for (k in buckets.keys.sorted()) {
             res.add(buckets[k]!!.last())
