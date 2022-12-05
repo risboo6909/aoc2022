@@ -39,41 +39,35 @@ fun main() {
     fun parseInstructions(input: List<String>): List<Instruction> {
         val instructions = mutableListOf<Instruction>()
 
-        for (line in input) {
-            if (!line.startsWith("move")) {
-                continue
+        input.forEach {
+            if (it.startsWith("move")) {
+                val components = it.split(' ')
+                val instr = Instruction(
+                    count = components[1].toInt(),
+                    from = components[3].toInt(),
+                    to = components[5].toInt(),
+                )
+                instructions.add(instr)
             }
-
-            val components = line.split(' ')
-            val instr = Instruction(
-                count = components[1].toInt(),
-                from = components[3].toInt(),
-                to = components[5].toInt(),
-            )
-
-            instructions.add(instr)
         }
 
         return instructions
     }
 
     fun getTopItems(buckets: BucketsMap): String {
-        val res = mutableListOf<Char>()
-        for (k in buckets.keys.sorted()) {
-            res.add(buckets[k]!!.last())
-        }
-
-        return res.joinToString("")
+        return buckets.keys
+            .sorted()
+            .map{buckets[it]!!.last()}
+            .joinToString("")
     }
 
     fun part1(input: List<String>): String {
         val buckets = parseBuckets(input)
         val instructions = parseInstructions(input)
 
-        for (instr in instructions) {
-            for (i in 0 until instr.count) {
-                val e = buckets[instr.from]!!.removeLast()
-                buckets[instr.to]!!.add(e)
+        instructions.forEach {
+            (0 until it.count).forEach {
+                    _ -> buckets[it.to]!!.add(buckets[it.from]!!.removeLast())
             }
         }
 
@@ -84,10 +78,10 @@ fun main() {
         val buckets = parseBuckets(input)
         val instructions = parseInstructions(input)
 
-        for (instr in instructions) {
-            val lastN = buckets[instr.from]!!.takeLast(instr.count)
-            buckets[instr.from] = (buckets[instr.from]!!.dropLast(instr.count)).toMutableList()
-            buckets[instr.to] = (buckets[instr.to]!! + lastN).toMutableList()
+        instructions.forEach {
+            val lastN = buckets[it.from]!!.takeLast(it.count)
+            buckets[it.from] = buckets[it.from]!!.dropLast(it.count).toMutableList()
+            buckets[it.to]!! += lastN
         }
 
         return getTopItems(buckets)
