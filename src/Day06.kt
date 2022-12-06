@@ -1,7 +1,7 @@
 fun main() {
 
     fun findUniq(line: String, windowSize: Int): Int? {
-        val window = ArrayDeque<Char>(5)
+        val window = ArrayDeque<Char>(windowSize+1)
 
         for ((i, s) in line.withIndex()) {
             window.addLast(s)
