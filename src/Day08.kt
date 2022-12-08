@@ -15,10 +15,10 @@ class Field(val f: (MyPair, MyPair, MyPair, MyPair) -> Int): Iterable<Int> {
                 } else {
                     col++
                 }
-                return f(isVisibleDown(row, col),
-                         isVisibleUp(row, col),
-                         isVisibleLeft(row, col),
-                         isVisibleRight(row, col)
+                return f(lookDown(row, col),
+                         lookUp(row, col),
+                         lookLeft(row, col),
+                         lookRight(row, col)
                 )
             }
         }
@@ -28,7 +28,7 @@ class Field(val f: (MyPair, MyPair, MyPair, MyPair) -> Int): Iterable<Int> {
         this.field.add(row)
     }
 
-    fun isVisibleRight(row: Int, col: Int): MyPair {
+    fun lookRight(row: Int, col: Int): MyPair {
         var dist = 0
         for (j in col+1 until this.field[row].size) {
             dist++
@@ -39,7 +39,7 @@ class Field(val f: (MyPair, MyPair, MyPair, MyPair) -> Int): Iterable<Int> {
         return Pair(true, dist)
     }
 
-    fun isVisibleLeft(row: Int, col: Int): MyPair {
+    fun lookLeft(row: Int, col: Int): MyPair {
         var dist = 0
         for (j in col-1 downTo 0) {
             dist++
@@ -50,7 +50,7 @@ class Field(val f: (MyPair, MyPair, MyPair, MyPair) -> Int): Iterable<Int> {
         return Pair(true, dist)
     }
 
-    fun isVisibleUp(row: Int, col: Int): MyPair {
+    fun lookUp(row: Int, col: Int): MyPair {
         var dist = 0
         for (j in row-1 downTo 0) {
             dist++
@@ -61,7 +61,7 @@ class Field(val f: (MyPair, MyPair, MyPair, MyPair) -> Int): Iterable<Int> {
         return Pair(true, dist)
     }
 
-    fun isVisibleDown(row: Int, col: Int): MyPair {
+    fun lookDown(row: Int, col: Int): MyPair {
         var dist = 0
         for (j in row+1 until this.field.size) {
             dist++
