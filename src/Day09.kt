@@ -8,7 +8,6 @@ enum class Direction {
 }
 
 typealias Step = Pair<Direction, Int>
-typealias Coords = Pair<Int, Int>
 
 fun buildStep(dir: String, count: String): Step? {
     return when (dir) {
