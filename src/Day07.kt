@@ -1,5 +1,3 @@
-import java.lang.Exception
-
 const val TOTAL_SPACE = 70_000_000
 const val SPACE_NEEDED = 30_000_000
 
@@ -8,8 +6,8 @@ enum class NodeType {
     FILE,
 }
 
-class Node(val type: NodeType, val name: String, var size: Int, val parent: Node?, val children: MutableSet<Node>?) {
-    fun attachNode(node: Node): Boolean {
+class INode(val type: NodeType, val name: String, var size: Int, val parent: INode?, val children: MutableSet<INode>?) {
+    fun attachNode(node: INode): Boolean {
         if (this.type == NodeType.FILE) {
             throw Exception("can't add children to file: ${this.name}")
         }
@@ -29,14 +27,14 @@ class Node(val type: NodeType, val name: String, var size: Int, val parent: Node
 
 fun main() {
 
-    fun findDir(curDir: Node, dirName: String): Node {
+    fun findDir(curDir: INode, dirName: String): INode {
         curDir.children?.filter{it.type == NodeType.DIR && it.name == dirName}?.forEach {
             return it
         }
         return curDir
     }
 
-    fun updateSizes(_curDir: Node?, size: Int) {
+    fun updateSizes(_curDir: INode?, size: Int) {
         // update sizes for parents
         var curDir = _curDir
         while (curDir != null) {
@@ -45,8 +43,8 @@ fun main() {
         }
     }
 
-    fun buildHier(input: List<String>): Node {
-        val root = Node(NodeType.DIR, "/", 0, null, mutableSetOf())
+    fun buildHier(input: List<String>): INode {
+        val root = INode(NodeType.DIR, "/", 0, null, mutableSetOf())
         var curDir = root
 
         for (line in input) {
@@ -62,11 +60,11 @@ fun main() {
             if (!line.startsWith("$")) {
                 val (something, name) = line.split(" ")
                 if (something == "dir") {
-                    curDir.attachNode(Node(NodeType.DIR, name, 0, curDir, mutableSetOf()))
+                    curDir.attachNode(INode(NodeType.DIR, name, 0, curDir, mutableSetOf()))
                     continue
                 }
                 val size = something.toInt()
-                if (curDir.attachNode(Node(NodeType.FILE, name, size, curDir, null))) {
+                if (curDir.attachNode(INode(NodeType.FILE, name, size, curDir, null))) {
                     updateSizes(curDir, size)
                 }
             }
@@ -77,7 +75,7 @@ fun main() {
     }
 
     fun part1(input: List<String>): Int {
-        fun inner(curNode: Node): Int {
+        fun inner(curNode: INode): Int {
             val acc = curNode.children!!.filter{it.type == NodeType.DIR}.sumOf { inner(it) }
             if (curNode.size < 100_000) {
                 return acc + curNode.size
@@ -94,7 +92,7 @@ fun main() {
         val spaceLeft = TOTAL_SPACE - root.size
         val spaceReq = SPACE_NEEDED - spaceLeft
 
-        fun inner(curNode: Node): Int {
+        fun inner(curNode: INode): Int {
             var minFound = Int.MAX_VALUE
             curNode.children!!.filter{it.type == NodeType.DIR}.forEach {
                 minFound = minOf(inner(it), minFound)
