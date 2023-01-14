@@ -4,6 +4,13 @@ import java.security.MessageDigest
 
 typealias Coords = Pair<Int, Int>
 
+enum class Direction {
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN,
+}
+
 /**
  * Reads lines from the given input txt file.
  */

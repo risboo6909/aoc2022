@@ -1,12 +1,5 @@
 import kotlin.math.abs
 
-enum class Direction {
-    LEFT,
-    RIGHT,
-    UP,
-    DOWN,
-}
-
 typealias Step = Pair<Direction, Int>
 
 fun buildStep(dir: String, count: String): Step? {
