@@ -5,7 +5,7 @@ import kotlin.math.abs
 const val START = 83
 const val END = 69
 
-fun Coords.manhattanDist(b: Coords): Int {
+fun Vector2.manhattanDist(b: Vector2): Int {
     return abs(this.first-b.first) + abs(this.second-b.second)
 }
 
@@ -14,7 +14,7 @@ fun main() {
         return input.map { it.chars().toList().toMutableList() }
     }
 
-    fun findOnMap(field: List<List<Int>>, needle: Int): Coords? {
+    fun findOnMap(field: List<List<Int>>, needle: Int): Vector2? {
         for ((rowIdx, row) in field.withIndex()) {
             val colIdx = row.indexOf(needle)
             if (colIdx != -1) {
@@ -24,27 +24,27 @@ fun main() {
         return null
     }
 
-    fun getNeighbours(field: List<List<Int>>, pos: Coords): MutableList<Coords> {
-        val res: MutableList<Coords> = mutableListOf()
+    fun getNeighbours(field: List<List<Int>>, pos: Vector2): MutableList<Vector2> {
+        val res: MutableList<Vector2> = mutableListOf()
         val (rowIdx, colIdx) = pos
 
         if (rowIdx+1 < field.size && field[rowIdx][colIdx]+1 >= field[rowIdx+1][colIdx]) {
-            res.add(Coords(rowIdx+1, colIdx))
+            res.add(Vector2(rowIdx+1, colIdx))
         }
         if (rowIdx-1 >= 0 && field[rowIdx][colIdx]+1 >= field[rowIdx-1][colIdx]) {
-            res.add(Coords(rowIdx-1, colIdx))
+            res.add(Vector2(rowIdx-1, colIdx))
         }
         if (colIdx+1 < field[0].size && field[rowIdx][colIdx]+1 >= field[rowIdx][colIdx+1]) {
-            res.add(Coords(rowIdx, colIdx+1))
+            res.add(Vector2(rowIdx, colIdx+1))
         }
         if (colIdx-1 >= 0 && field[rowIdx][colIdx]+1 >= field[rowIdx][colIdx-1]) {
-            res.add(Coords(rowIdx, colIdx-1))
+            res.add(Vector2(rowIdx, colIdx-1))
         }
 
         return res
     }
 
-    fun computeDistance(paths: Map<Coords, Coords>, startPos: Coords, endPos: Coords): Int {
+    fun computeDistance(paths: Map<Vector2, Vector2>, startPos: Vector2, endPos: Vector2): Int {
         var curNode = endPos
         var totalNodes = 0
 
@@ -58,15 +58,15 @@ fun main() {
         return totalNodes
     }
 
-    fun shortestAStar(field: List<MutableList<Int>>, startPos: Coords, endPos: Coords, weights: MutableMap<Coords, Int>): MutableMap<Coords, Coords> {
+    fun shortestAStar(field: List<MutableList<Int>>, startPos: Vector2, endPos: Vector2, weights: MutableMap<Vector2, Int>): MutableMap<Vector2, Vector2> {
         field[startPos.first][startPos.second] = 'a'.code
         field[endPos.first][endPos.second] = 'z'.code
 
         weights[startPos] = 0
 
-        val paths: MutableMap<Coords, Coords> = mutableMapOf()
+        val paths: MutableMap<Vector2, Vector2> = mutableMapOf()
 
-        val frontier = PriorityQueue<Pair<Coords, Int>>{a, b -> a.second - b.second}
+        val frontier = PriorityQueue<Pair<Vector2, Int>>{ a, b -> a.second - b.second}
         frontier.add(Pair(startPos, 0))
 
         while (frontier.isNotEmpty()) {
@@ -92,7 +92,7 @@ fun main() {
         val field = readMap(input)
         val startPos = findOnMap(field, START)!!
         val endPos = findOnMap(field, END)!!
-        val weights: MutableMap<Coords, Int> = mutableMapOf(Pair(startPos, 0))
+        val weights: MutableMap<Vector2, Int> = mutableMapOf(Pair(startPos, 0))
 
         val paths = shortestAStar(field, startPos, endPos, weights)
         return computeDistance(paths, startPos, endPos)
@@ -101,12 +101,12 @@ fun main() {
     fun part2(input: List<String>): Int {
         val field = readMap(input)
         val endPos = findOnMap(field, END)!!
-        val weights: MutableMap<Coords, Int> = mutableMapOf()
+        val weights: MutableMap<Vector2, Int> = mutableMapOf()
 
         return field.withIndex().flatMap { (rowIdx, row) ->
             row.withIndex().map { (colIdx, e) ->
                 if (e == 'a'.code) {
-                    val startPos = Coords(rowIdx, colIdx)
+                    val startPos = Vector2(rowIdx, colIdx)
                     val paths = shortestAStar(field, startPos, endPos, weights)
                     computeDistance(paths, startPos, endPos)
                 } else {

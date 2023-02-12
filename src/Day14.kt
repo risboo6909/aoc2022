@@ -9,10 +9,10 @@ private infix fun Int.toward(to: Int): IntProgression {
 }
 
 fun main() {
-    val source = Coords(500, 0)
+    val source = Vector2(500, 0)
 
-    fun makeObstacles(input: List<String>): MutableMap<Coords, Entity> {
-        val res = mutableMapOf<Coords, Entity>()
+    fun makeObstacles(input: List<String>): MutableMap<Vector2, Entity> {
+        val res = mutableMapOf<Vector2, Entity>()
         for (line in input) {
             val tmp = line.split(" -> ").map{ it -> it.split(',').map { it.toInt() } }
             tmp.zipWithNext().forEach{
@@ -22,11 +22,11 @@ fun main() {
 
                 if (x0 != x1) {
                     for (x in (x0 toward x1)) {
-                        res[Coords(x, y1)] = Entity.ROCK
+                        res[Vector2(x, y1)] = Entity.ROCK
                     }
                 } else if (y1 != y0) {
                     for (y in y0 toward y1) {
-                        res[Coords(x0, y)] = Entity.ROCK
+                        res[Vector2(x0, y)] = Entity.ROCK
                     }
                 }
             }
@@ -35,29 +35,29 @@ fun main() {
         return res
     }
 
-    fun advance(field: MutableMap<Coords, Entity>, coords: Coords, floorLevel: Int = -1): Coords? {
+    fun advance(field: MutableMap<Vector2, Entity>, coords: Vector2, floorLevel: Int = -1): Vector2? {
         val (x, y) = coords
 
         if (y == floorLevel) {
-            field.remove(Coords(x, y))
-            field[Coords(x, y-1)] = Entity.BALL
+            field.remove(Vector2(x, y))
+            field[Vector2(x, y-1)] = Entity.BALL
             return null
         }
 
-        if (!field.containsKey(Coords(x, y+1))) {
-            field.remove(Coords(x, y))
-            field[Coords(x, y+1)] = Entity.BALL
-            return Coords(x, y+1)
+        if (!field.containsKey(Vector2(x, y+1))) {
+            field.remove(Vector2(x, y))
+            field[Vector2(x, y+1)] = Entity.BALL
+            return Vector2(x, y+1)
         }
-        if (!field.containsKey(Coords(x-1, y+1))) {
-            field.remove(Coords(x, y))
-            field[Coords(x-1, y+1)] = Entity.BALL
-            return Coords(x-1, y+1)
+        if (!field.containsKey(Vector2(x-1, y+1))) {
+            field.remove(Vector2(x, y))
+            field[Vector2(x-1, y+1)] = Entity.BALL
+            return Vector2(x-1, y+1)
         }
-        if  (!field.containsKey(Coords(x+1, y+1))) {
-            field.remove(Coords(x, y))
-            field[Coords(x+1, y+1)] = Entity.BALL
-            return Coords(x+1, y+1)
+        if  (!field.containsKey(Vector2(x+1, y+1))) {
+            field.remove(Vector2(x, y))
+            field[Vector2(x+1, y+1)] = Entity.BALL
+            return Vector2(x+1, y+1)
         }
 
         return null
@@ -67,7 +67,7 @@ fun main() {
         val field = makeObstacles(input)
 
         val maxY = field.keys.maxBy { it.second }.second
-        var curPos: Coords? = source
+        var curPos: Vector2? = source
         var balls = 0
 
         while (curPos!!.second <= maxY) {
@@ -85,7 +85,7 @@ fun main() {
         val field = makeObstacles(input)
 
         val maxY = field.keys.maxBy { it.second }.second
-        var curPos: Coords? = source
+        var curPos: Vector2? = source
         var balls = 0
 
         while (true) {

@@ -1,4 +1,4 @@
-data class Scanner(val center: Coords, val beacon: Coords)
+data class Scanner(val center: Vector2, val beacon: Vector2)
 
 fun main() {
 
@@ -12,13 +12,13 @@ fun main() {
             val y1 = groups["y1"]!!.value.toInt()
             val x2 = groups["x2"]!!.value.toInt()
             val y2 = groups["y2"]!!.value.toInt()
-            res.add(Scanner(Coords(x1, y1), Coords(x2, y2)))
+            res.add(Scanner(Vector2(x1, y1), Vector2(x2, y2)))
         }
         return res
     }
 
-    fun scanLine(scanners: List<Scanner>, targetY: Int): Pair<Set<Coords>, Set<Int>> {
-        val segments = mutableSetOf<Coords>()
+    fun scanLine(scanners: List<Scanner>, targetY: Int): Pair<Set<Vector2>, Set<Int>> {
+        val segments = mutableSetOf<Vector2>()
         val exclude = scanners.
                 filter { it.beacon.second == targetY }.
                 map { it.beacon.first }.toSet()
@@ -38,7 +38,7 @@ fun main() {
                 val stX = scanner.center.first - deltaX
                 val endX = scanner.center.first + deltaX
 
-                segments.add(Coords(stX, endX))
+                segments.add(Vector2(stX, endX))
             }
         }
 
@@ -52,7 +52,7 @@ fun main() {
         return segments.last().second - segments.first().first - res.second.size + 1
     }
 
-    fun findGap(segments: Set<Coords>): Int? {
+    fun findGap(segments: Set<Vector2>): Int? {
         var maxSoFar = Int.MIN_VALUE
         for ((cur, next) in segments.sortedBy { it.first }.zipWithNext()) {
             if (cur.second > maxSoFar) {

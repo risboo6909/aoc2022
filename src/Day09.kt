@@ -13,12 +13,12 @@ fun buildStep(dir: String, count: String): Step? {
 }
 
 class Rope(tailSize: Int) {
-    private var head: Coords = Pair(0, 0)
-    private var tail: MutableList<Coords> = (0 until tailSize).map { Pair(0, 0) }.toMutableList()
+    private var head: Vector2 = Pair(0, 0)
+    private var tail: MutableList<Vector2> = (0 until tailSize).map { Pair(0, 0) }.toMutableList()
 
-    private fun updateTail(): Coords {
+    private fun updateTail(): Vector2 {
 
-        fun inner(headX: Int, headY: Int, idx: Int): Coords {
+        fun inner(headX: Int, headY: Int, idx: Int): Vector2 {
             if (idx == tail.size) {
                 return tail[tail.size-1]
             }
@@ -53,9 +53,9 @@ class Rope(tailSize: Int) {
         return inner(head.first, head.second, 0)
     }
 
-    fun updateHead(step: Step): Set<Coords> {
+    fun updateHead(step: Step): Set<Vector2> {
         val (direction, count) = step
-        val tailPositions: MutableSet<Coords> = mutableSetOf()
+        val tailPositions: MutableSet<Vector2> = mutableSetOf()
 
         for (littleStep in (0..count)) {
             val (headX, headY) = head
@@ -88,7 +88,7 @@ fun main() {
 
     fun part1(input: List<String>): Int {
         val rope = Rope(1)
-        var tailPositions: Set<Coords> = mutableSetOf()
+        var tailPositions: Set<Vector2> = mutableSetOf()
 
         for (line in input) {
             val (direction, count) = line.split(' ')
@@ -99,7 +99,7 @@ fun main() {
 
     fun part2(input: List<String>): Int {
         val rope = Rope(9)
-        var tailPositions: Set<Coords> = mutableSetOf()
+        var tailPositions: Set<Vector2> = mutableSetOf()
 
         for (line in input) {
             val (direction, count) = line.split(' ')

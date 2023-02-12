@@ -2,7 +2,14 @@ import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
 
-typealias Coords = Pair<Int, Int>
+typealias Vector2 = Pair<Int, Int>  // x, y
+typealias Vector3 = Triple<Int, Int, Int>   // x, y, z
+
+fun Vector3.add(v: Vector3): Vector3 = Vector3(this.first + v.first, this.second + v.second, this.third + v.third)
+
+fun Vector3.sub(v: Vector3): Vector3 = this.add(Vector3(-v.first, -v.second, -v.third))
+
+fun Boolean.toInt() = if (this) 1 else 0
 
 enum class Direction {
     LEFT,

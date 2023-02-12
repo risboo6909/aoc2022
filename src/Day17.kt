@@ -6,7 +6,7 @@ const val GLASS_HEIGHT = 20000
 const val TOTAL_ITERS = 1_000_000_000_000
 
 
-data class Piece(var coords: Coords, val pieceIdx: Int)
+data class Piece(var coords: Vector2, val pieceIdx: Int)
 
 fun main() {
 
@@ -171,7 +171,7 @@ fun main() {
         val glass = makeBorders(Array(GLASS_HEIGHT) {Array(GLASS_WIDTH+2) {0} })
 
         // create initial piece
-        var piece: Piece? = Piece(Coords(ROW_OFFSET + 3, START_COL), pieceIdx)
+        var piece: Piece? = Piece(Vector2(ROW_OFFSET + 3, START_COL), pieceIdx)
 
         // parse input
         val parsed = parse(input)
@@ -184,7 +184,7 @@ fun main() {
             if (!isMoved) {
                 pieceIdx = (pieceIdx + 1) % pieces.size
                 topPoint = findTopPoint(glass, topPoint)
-                piece = Piece(Coords(topPoint + ROW_OFFSET + 3, START_COL), pieceIdx)
+                piece = Piece(Vector2(topPoint + ROW_OFFSET + 3, START_COL), pieceIdx)
                 piecesTotal++
             }
             dirIdx++
@@ -274,7 +274,7 @@ fun main() {
         val glass = makeBorders(Array(GLASS_HEIGHT) {Array(GLASS_WIDTH+2) {0} })
 
         // create initial piece
-        var piece: Piece? = Piece(Coords(ROW_OFFSET + 3, START_COL), pieceIdx)
+        var piece: Piece? = Piece(Vector2(ROW_OFFSET + 3, START_COL), pieceIdx)
 
         // parse input
         val parsed = parse(input)
@@ -289,7 +289,7 @@ fun main() {
                 pieceIdx = (pieceIdx + 1) % pieces.size
 
                 topPoint = findTopPoint(glass, topPoint)
-                piece = Piece(Coords(topPoint + ROW_OFFSET + 3, START_COL), pieceIdx)
+                piece = Piece(Vector2(topPoint + ROW_OFFSET + 3, START_COL), pieceIdx)
                 piecesTotal++
 
                 val (newSeparatorRowIdx, found) = findLine(glass, prevSeparatorRowIdx, topPoint, sep)
